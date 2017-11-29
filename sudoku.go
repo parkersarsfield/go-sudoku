@@ -18,17 +18,33 @@ func main() {
 					{0, 3, 4, 0, 9, 0, 7, 1, 0},}
 	
 	isSolved, solved := solve(0, 0, myPuzzle)
-	print(solved)
-	fmt.Println("sudoku solved?", isSolved)
+
+	fmt.Println("Sudoku puzzle is:")
+	print(myPuzzle)
+	if isSolved {
+		fmt.Println("Puzzle solved. The solution is:")
+		print(solved)
+	} else {
+		fmt.Println("The puzzle could not be solved.")
+	}
 }
 
+// Prints a sudoku Puzzle.
 func print(puzzle Puzzle) {
-	for _, i := range puzzle {
-		for _, j := range i {
-			fmt.Print(j)
+	for iIndex, i := range puzzle {
+		for jIndex, j := range i {
+			fmt.Print(j, " ")
+			if jIndex == 2 || jIndex == 5 {
+				fmt.Print("| ")
+			}
 		}
+		
 		fmt.Println()
+		if iIndex == 2 || iIndex == 5 {
+			fmt.Println("------+-------+------")
+		}
 	}
+	fmt.Println()
 }
 
 //solves the sudoku puzzle from i, j and returns true if it is solved, false if it cannot be solved.
