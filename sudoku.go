@@ -13,11 +13,10 @@ type Puzzle [9][9]int
 
 func main() {
 	myPuzzle := loadFromFile("sudokutest.txt")
-
-	isSolved, solved := solve(0, 0, myPuzzle)
-
 	fmt.Println("Sudoku puzzle is:")
 	print(myPuzzle)
+
+	isSolved, solved := solve(0, 0, myPuzzle)
 	if isSolved {
 		fmt.Println("Puzzle solved. The solution is:")
 		print(solved)
@@ -26,6 +25,7 @@ func main() {
 	}
 }
 
+// check that there is no error, panic with error otherwise
 func checkError (err error) {
     if err != nil{
         panic(err)
@@ -45,10 +45,12 @@ func loadFromFile(filename string) (sudokuBoard Puzzle) {
         j := 0
         digit:= ""
         for j<8 {
+        	// read each digit in the row except for the last digit
         	digit, _ = reader.ReadString(' ')
             sudokuBoard[i][j], _ = strconv.Atoi(strings.TrimSpace(digit))
             j++
         }
+        // read last digit which should have a newline character
         digit, _ = reader.ReadString('\n')
         sudokuBoard[i][j], _ = strconv.Atoi(strings.TrimSpace(digit))
         i++
