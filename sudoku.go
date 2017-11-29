@@ -1,3 +1,9 @@
+// Name: Jesse Seales, Parker Sarsfield
+// VUnetID: sealesjd, 
+// Email: jesse.d.seales@vanderbilt.edu, parker.h.sarsfield@vanderbilt.edu
+// Class: CS3270 @ Vanderbilt U.
+// Honor statement: We have neither given nor received unauthorized aid on this assignment.
+
 package main
 
 import (
