@@ -2,21 +2,18 @@ package main
 
 import (
 	"fmt"
+	"io"
+    "bufio"
+    "os"
+    "strconv"
+    "strings"
 )
 
 type Puzzle [9][9]int
 
 func main() {
-	myPuzzle := Puzzle{{0, 4, 3, 0, 8, 0, 2, 5, 0},
-					{6, 0, 0, 0, 0, 0, 0, 0, 0},
-					{0, 0, 0, 0, 0, 1, 0, 9, 4},
-					{9, 0, 0, 0, 0, 4, 0, 7, 0},
-					{0, 0, 0, 6, 0, 8, 0, 0, 0},
-					{0, 1, 0, 2, 0, 0, 0, 0, 3},
-					{8, 2, 0, 5, 0, 0, 0, 0, 0},
-					{0, 0, 0, 0, 0, 0, 0, 0, 5},
-					{0, 3, 4, 0, 9, 0, 7, 1, 0},}
-	
+	myPuzzle := loadFromFile("sudokutest.txt")
+
 	isSolved, solved := solve(0, 0, myPuzzle)
 
 	fmt.Println("Sudoku puzzle is:")
@@ -27,6 +24,37 @@ func main() {
 	} else {
 		fmt.Println("The puzzle could not be solved.")
 	}
+}
+
+func checkError (err error) {
+    if err != nil{
+        panic(err)
+    }
+}
+
+// given a sudoku puzzle in a txt file,
+// read in the values and store in a 2d array (matrix)
+// if file can't be found, exit with an error
+func loadFromFile(filename string) (sudokuBoard Puzzle) {
+    file, err := os.Open(filename)
+    checkError(err)
+    reader := bufio.NewReader(file)
+
+    i := 0
+    for i<9 && err!=io.EOF {
+        j := 0
+        digit:= ""
+        for j<8 {
+        	digit, _ = reader.ReadString(' ')
+            sudokuBoard[i][j], _ = strconv.Atoi(strings.TrimSpace(digit))
+            j++
+        }
+        digit, _ = reader.ReadString('\n')
+        sudokuBoard[i][j], _ = strconv.Atoi(strings.TrimSpace(digit))
+        i++
+    }
+
+    return sudokuBoard
 }
 
 // Prints a sudoku Puzzle.
@@ -47,7 +75,8 @@ func print(puzzle Puzzle) {
 	fmt.Println()
 }
 
-//solves the sudoku puzzle from i, j and returns true if it is solved, false if it cannot be solved.
+//solves the sudoku puzzle from i, j and returns true if it is solved,
+//false if it cannot be solved.
 func solve(i, j int, puzzle Puzzle) (bool, Puzzle) {
 	if i == 9 {
 		i = 0
